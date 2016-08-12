@@ -26,7 +26,7 @@ describe('CsvWriter', () => {
         })
     });
 
-    it('wraps a field value with double quotes if the field contains comma', () => {
+    it('wraps a header value with double quotes if the header contains comma', () => {
         const fs = {
             writeFile: sinon.stub().callsArgWith(3, null)
         };
@@ -49,7 +49,7 @@ describe('CsvWriter', () => {
         })
     });
 
-    it('does not double quote or escape double quotes if it is used not on the edge of the string', () => {
+    it('does not double quote or escape double quotes if it is used not on the edge of the header value', () => {
         const fs = {
             writeFile: sinon.stub().callsArgWith(3, null)
         };
@@ -72,7 +72,7 @@ describe('CsvWriter', () => {
         })
     });
 
-    it('escapes double quotes if it is used on the edge of the field value', () => {
+    it('escapes double quotes if it is used on the edge of the header value', () => {
         const fs = {
             writeFile: sinon.stub().callsArgWith(3, null)
         };
@@ -122,6 +122,96 @@ describe('CsvWriter', () => {
             expect(fs.writeFile.args[1].slice(0, 3)).to.eql([
                 'FILE_PATH',
                 'VALUE_A1,VALUE_B1',
+                {
+                    encoding: 'utf8',
+                    flag: 'a'
+                }
+            ]);
+        })
+    });
+
+    it('wraps a field value with double quotes if the field contains comma', () => {
+        const fs = {
+            writeFile: sinon.stub().callsArgWith(3, null)
+        };
+        const header = [
+            {id: 'FIELD_A', name: 'TITLE_A'},
+            {id: 'FIELD_B', name: 'TITLE_B'}
+        ];
+        const writer = new CsvWriter({
+            fs,
+            filePath: 'FILE_PATH',
+            header
+        });
+
+        const row = {
+            FIELD_A: 'VALUE,A1',
+            FIELD_B: 'VALUE_B1'
+        };
+        return writer.write(row).then(() => {
+            expect(fs.writeFile.args[1].slice(0, 3)).to.eql([
+                'FILE_PATH',
+                '"VALUE,A1",VALUE_B1',
+                {
+                    encoding: 'utf8',
+                    flag: 'a'
+                }
+            ]);
+        })
+    });
+
+    it('does not double quote or escape double quotes if it is used not on the edge of the field value', () => {
+        const fs = {
+            writeFile: sinon.stub().callsArgWith(3, null)
+        };
+        const header = [
+            {id: 'FIELD_A', name: 'TITLE_A'},
+            {id: 'FIELD_B', name: 'TITLE_B'}
+        ];
+        const writer = new CsvWriter({
+            fs,
+            filePath: 'FILE_PATH',
+            header
+        });
+
+        const row = {
+            FIELD_A: 'VALUE"A1',
+            FIELD_B: 'VALUE_B1'
+        };
+        return writer.write(row).then(() => {
+            expect(fs.writeFile.args[1].slice(0, 3)).to.eql([
+                'FILE_PATH',
+                'VALUE"A1,VALUE_B1',
+                {
+                    encoding: 'utf8',
+                    flag: 'a'
+                }
+            ]);
+        })
+    });
+
+    it('escapes double quotes if it is used on the edge of the field value', () => {
+        const fs = {
+            writeFile: sinon.stub().callsArgWith(3, null)
+        };
+        const header = [
+            {id: 'FIELD_A', name: 'TITLE_A'},
+            {id: 'FIELD_B', name: 'TITLE_B'}
+        ];
+        const writer = new CsvWriter({
+            fs,
+            filePath: 'FILE_PATH',
+            header
+        });
+
+        const row = {
+            FIELD_A: '"VALUE_A1',
+            FIELD_B: 'VALUE_B1'
+        };
+        return writer.write(row).then(() => {
+            expect(fs.writeFile.args[1].slice(0, 3)).to.eql([
+                'FILE_PATH',
+                '"""VALUE_A1",VALUE_B1',
                 {
                     encoding: 'utf8',
                     flag: 'a'
