@@ -20,7 +20,7 @@ describe('CsvWriter', () => {
         return writer.writeHeader().then(() => {
             expect(fs.writeFile.args[0].slice(0, 3)).to.eql([
                 'FILE_PATH',
-                'TITLE_A,TITLE_B',
+                'TITLE_A,TITLE_B\n',
                 {encoding: 'utf8'}
             ]);
         })
@@ -43,7 +43,7 @@ describe('CsvWriter', () => {
         return writer.writeHeader().then(() => {
             expect(fs.writeFile.args[0].slice(0, 3)).to.eql([
                 'FILE_PATH',
-                '"TITLE,A",TITLE_B',
+                '"TITLE,A",TITLE_B\n',
                 {encoding: 'utf8'}
             ]);
         })
@@ -66,7 +66,7 @@ describe('CsvWriter', () => {
         return writer.writeHeader().then(() => {
             expect(fs.writeFile.args[0].slice(0, 3)).to.eql([
                 'FILE_PATH',
-                'TITLE"A,TITLE_B',
+                'TITLE"A,TITLE_B\n',
                 {encoding: 'utf8'}
             ]);
         })
@@ -89,7 +89,7 @@ describe('CsvWriter', () => {
         return writer.writeHeader().then(() => {
             expect(fs.writeFile.args[0].slice(0, 3)).to.eql([
                 'FILE_PATH',
-                '"""TITLE_A",TITLE_B',
+                '"""TITLE_A",TITLE_B\n',
                 {encoding: 'utf8'}
             ]);
         })
@@ -116,12 +116,12 @@ describe('CsvWriter', () => {
         return writer.write(row).then(() => {
             expect(fs.writeFile.args[0].slice(0, 3)).to.eql([
                 'FILE_PATH',
-                'TITLE_A,TITLE_B',
+                'TITLE_A,TITLE_B\n',
                 {encoding: 'utf8'}
             ]);
             expect(fs.writeFile.args[1].slice(0, 3)).to.eql([
                 'FILE_PATH',
-                'VALUE_A1,VALUE_B1',
+                'VALUE_A1,VALUE_B1\n',
                 {
                     encoding: 'utf8',
                     flag: 'a'
@@ -151,7 +151,7 @@ describe('CsvWriter', () => {
         return writer.write(row).then(() => {
             expect(fs.writeFile.args[1].slice(0, 3)).to.eql([
                 'FILE_PATH',
-                '"VALUE,A1",VALUE_B1',
+                '"VALUE,A1",VALUE_B1\n',
                 {
                     encoding: 'utf8',
                     flag: 'a'
@@ -181,7 +181,7 @@ describe('CsvWriter', () => {
         return writer.write(row).then(() => {
             expect(fs.writeFile.args[1].slice(0, 3)).to.eql([
                 'FILE_PATH',
-                'VALUE"A1,VALUE_B1',
+                'VALUE"A1,VALUE_B1\n',
                 {
                     encoding: 'utf8',
                     flag: 'a'
@@ -211,7 +211,7 @@ describe('CsvWriter', () => {
         return writer.write(row).then(() => {
             expect(fs.writeFile.args[1].slice(0, 3)).to.eql([
                 'FILE_PATH',
-                '"""VALUE_A1",VALUE_B1',
+                '"""VALUE_A1",VALUE_B1\n',
                 {
                     encoding: 'utf8',
                     flag: 'a'
