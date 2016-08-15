@@ -4,7 +4,7 @@
 const fs = require('fs');
 const request = require('request');
 
-const CsvWriter = require('./lib/csv-writer');
+const CsvWriterFactory = require('./lib/csv-writer-factory');
 const ExtensionData = require('./lib/extension-data');
 const ExtensionDataFormatter = require('./lib/extension-data-formatter');
 const ExtensionGalleryReader = require('./lib/extension-gallery-reader');
@@ -20,7 +20,7 @@ reader.read().then(data => {
         {id: 'installCount', name: 'INSTALL_COUNT'},
         {id: 'moment', name: 'MOMENT'}
     ];
-    const writer = new CsvWriter({fs, filePath, header});
+    const writer = new CsvWriterFactory({fs}).create({filePath, header});
     const extensions = data.results[0].extensions;
     const formatter = new ExtensionDataFormatter(new Date());
 
