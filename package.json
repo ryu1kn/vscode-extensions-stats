@@ -7,8 +7,8 @@
     "test": "mocha test --recursive"
   },
   "keywords": [],
-  "author": "",
-  "license": "ISC",
+  "author": "Ryuichi Inagaki",
+  "license": "MIT",
   "dependencies": {
     "request": "^2.74.0"
   },
