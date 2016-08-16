@@ -33,13 +33,31 @@ describe('FieldStringifier', () => {
         expect(stringifier.stringify()).to.eql('');
     });
 
-    it('converts an object into toString -ed value', () => {
+    it('converts an object into toString-ed value', () => {
         const stringifier = new FieldStringifier();
         const obj = {
             name: 'OBJECT_NAME',
             toString: function () { return `Name: ${this.name}`; }
         }
         expect(stringifier.stringify(obj)).to.eql('Name: OBJECT_NAME');
+    });
+
+    it('wraps a toString-ed field value with double quote if the value contains comma', () => {
+        const stringifier = new FieldStringifier();
+        const obj = {
+            name: 'OBJECT,NAME',
+            toString: function () { return `Name: ${this.name}`; }
+        }
+        expect(stringifier.stringify(obj)).to.eql('"Name: OBJECT,NAME"');
+    });
+
+    it('escapes double quotes in a toString-ed field value if the value has double quotes on the edge', () => {
+        const stringifier = new FieldStringifier();
+        const obj = {
+            name: 'OBJECT_NAME"',
+            toString: function () { return `Name: ${this.name}`; }
+        }
+        expect(stringifier.stringify(obj)).to.eql('"Name: OBJECT_NAME"""');
     });
 
 });
