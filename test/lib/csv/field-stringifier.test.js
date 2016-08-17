@@ -33,6 +33,11 @@ describe('FieldStringifier', () => {
         expect(stringifier.stringify()).to.eql('');
     });
 
+    it('converts null into an empty string', () => {
+        const stringifier = new FieldStringifier();
+        expect(stringifier.stringify(null)).to.eql('');
+    });
+
     it('converts an object into toString-ed value', () => {
         const stringifier = new FieldStringifier();
         const obj = {
