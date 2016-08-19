@@ -1,10 +1,9 @@
 
 'use strict';
 
-const fs = require('fs');
 const request = require('request');
+const CsvWriter = require('csv-writer');
 
-const CsvWriterFactory = require('./lib/csv-writer-factory');
 const ExtensionData = require('./lib/extension-data');
 const ExtensionDataFormatter = require('./lib/extension-data-formatter');
 const ExtensionGalleryReader = require('./lib/extension-gallery-reader');
@@ -12,15 +11,16 @@ const ExtensionGalleryReader = require('./lib/extension-gallery-reader');
 const reader = new ExtensionGalleryReader({request});
 
 reader.read().then(data => {
-    const filePath = `__extension-${getDateString(new Date())}.csv`;
-    const header = [
-        {id: 'id', name: 'EXTENSION_ID'},
-        {id: 'name', name: 'EXTENSION_NAME'},
-        {id: 'publishedDate', name: 'PUBLISHED_DATE'},
-        {id: 'installCount', name: 'INSTALL_COUNT'},
-        {id: 'moment', name: 'MOMENT'}
-    ];
-    const writer = new CsvWriterFactory({fs}).create({filePath, header});
+    const writer = new CsvWriter({
+        path: `__extension-${getDateString(new Date())}.csv`,
+        header: [
+            {id: 'id', title: 'EXTENSION_ID'},
+            {id: 'name', title: 'EXTENSION_NAME'},
+            {id: 'publishedDate', title: 'PUBLISHED_DATE'},
+            {id: 'installCount', title: 'INSTALL_COUNT'},
+            {id: 'moment', title: 'MOMENT'}
+        ]
+    });
     const extensions = data.results[0].extensions;
     const formatter = new ExtensionDataFormatter(new Date());
 
