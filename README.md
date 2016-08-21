@@ -1,9 +1,23 @@
 # vscode-extensions-stats
 
-Get download counts of the top 1000 extensions
+Get download counts of the top 1000 extensions in CSV format
 
 ## Usage
 
 ```sh
 $ node app.js
+```
+
+```
+$ cat __extension-20160821.csv | head
+EXTENSION_ID,EXTENSION_NAME,PUBLISHED_DATE,INSTALL_COUNT,MOMENT
+d0bfc4ab-1d3a-4487-8782-7cf6027b4fff,C#,2016-02-26T16:20:54.800Z,505881,2861.70
+f1f59ae4-9318-4f3c-a9b5-81b2eaa5f8a5,Python,2016-01-19T15:03:11.337Z,334093,1555.15
+1ec62ca5-d7f9-4ddb-a882-e8d018c0aefd,Debugger for Chrome,2015-11-12T01:09:31.740Z,250426,883.62
+690b692e-e8a9-493f-b802-8089d50ac1b2,C/C++,2016-03-30T01:27:10.053Z,244380,1692.42
+d6f6cfea-4b6f-41f4-b571-6ad2ab7918da,Go,2015-10-15T17:20:11.443Z,147589,474.97
+40d39ce9-c381-47a0-80c8-a6661f731eab,PowerShell,2015-11-18T00:50:38.583Z,132533,477.73
+583b2b34-2c1e-4634-8c0b-0b82e283ea3a,ESLint,2015-11-16T11:58:32.243Z,122793,440.18
+9ccc1dd7-7ec4-4a46-bd4f-7d7b8b9d322a,vscode-icons,2016-06-01T00:23:27.547Z,115893,1423.03
+be992f3f-9f22-4b66-a1d2-ecad04c28a28,HTML Snippets,2015-12-24T19:27:06.857Z,105556,438.63
 ```
