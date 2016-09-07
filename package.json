@@ -10,7 +10,7 @@
   "author": "Ryuichi Inagaki",
   "license": "MIT",
   "dependencies": {
-    "csv-writer": "git+https://github.com/ryu1kn/csv-writer.git",
+    "csv-writer": "0.0.1",
     "request": "^2.74.0"
   },
   "devDependencies": {
