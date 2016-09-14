@@ -2,7 +2,7 @@
   "name": "vscode-extensions-stats",
   "version": "0.0.1",
   "description": "",
-  "main": "app.js",
+  "main": "index.js",
   "scripts": {
     "test": "mocha test --recursive"
   },
@@ -10,7 +10,6 @@
   "author": "Ryuichi Inagaki",
   "license": "MIT",
   "dependencies": {
-    "csv-writer": "0.0.1",
     "request": "^2.74.0"
   },
   "devDependencies": {

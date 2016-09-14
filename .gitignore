@@ -1,4 +1,4 @@
-/node_modules
 /.vscode
+/lambdas/**/config.json
+node_modules
 __*
-/lambdas
