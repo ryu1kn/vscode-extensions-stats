@@ -1,0 +1,25 @@
+{
+  "name": "vscode-extensions-status",
+  "version": "1.0.0",
+  "description": "AWS Lambda function to save my Visual Studio Code extension stats into DynamoDB",
+  "main": "app.js",
+  "dependencies": {
+    "aws-sdk": "^2.6.3",
+    "minimist": "^1.2.0"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ryu1kn/vscode-extensions-stats.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/ryu1kn/vscode-extensions-stats/issues"
+  },
+  "homepage": "https://github.com/ryu1kn/vscode-extensions-stats#readme"
+}
