@@ -12,10 +12,10 @@ const docClient = new aws.DynamoDB.DocumentClient({
 });
 
 const params = {
-    TableName : "vsc-extension-stats--stats",
-    KeyConditionExpression: "extensionId = :extId",
+    TableName : 'vsc-extension-stats--stats',
+    KeyConditionExpression: 'extensionId = :extId',
     ExpressionAttributeValues: {
-        ":extId": '2100095e-ca9e-42ef-9bb4-5da1002c8139'
+        ':extId': '2100095e-ca9e-42ef-9bb4-5da1002c8139'
     }
 };
 docClient.query(params).promise()
