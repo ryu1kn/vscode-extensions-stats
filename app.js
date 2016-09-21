@@ -25,7 +25,7 @@ docClient.scan(params).promise()
     .then(data => data.Items)
     .then(items => items.map(getWriteObject))
     .then(records => {
-        console.log(csvStringifier.getHeaderString());
+        console.log(csvStringifier.getHeaderString().trim());
         console.log(csvStringifier.stringifyRecords(records));
     }).catch(e => {
         console.log(e);
