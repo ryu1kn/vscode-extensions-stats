@@ -1,7 +1,7 @@
 
 const aws = require('aws-sdk');
 const fs = require('fs');
-const createCsvStringifier = require('csv-writer').createObjectCsvStringifier
+const createCsvStringifier = require('csv-writer').createObjectCsvStringifier;
 
 const argv = require('minimist')(process.argv.slice(2));
 
@@ -28,7 +28,7 @@ docClient.scan(params).promise()
         console.log(csvStringifier.getHeaderString().trim());
         console.log(csvStringifier.stringifyRecords(records));
     }).catch(e => {
-        console.log(e);
+        console.error(e.stack);
     });
 
 function getWriteObject(item) {
