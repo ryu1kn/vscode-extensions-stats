@@ -25,8 +25,7 @@ const params = {TableName : 'vsc-extension-stats--stats'};
 
 // TODO: Paging
 docClient.scan(params).promise()
-    .then(data => data.Items)
-    .then(items => items.map(getWriteObject))
+    .then(data => data.Items.map(getWriteObject))
     .then(transformIntoDateRecords)
     .then(records => {
         console.log(csvStringifier.getHeaderString().trim());
