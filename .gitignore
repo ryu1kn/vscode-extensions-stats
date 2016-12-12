@@ -1,4 +1,5 @@
+/.kumo
 /.vscode
-/lambdas/**/config.json
+/lambdas/**/module-config/*
 node_modules
 __*

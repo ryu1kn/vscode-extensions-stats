@@ -1,0 +1,11 @@
+{
+  "uploadBucket": {
+    "name": "lambda-packages-cg3j2bu2"
+  },
+  "packages": [
+    {
+      "name": "fetch-vscode-extension-stats",
+      "package-script": "zip -q -r $KUMO_PACKAGE_OUTPUT_FILE dest/* dest/.*"
+    }
+  ]
+}

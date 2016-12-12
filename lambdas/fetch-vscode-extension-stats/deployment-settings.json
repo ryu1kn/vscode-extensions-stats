@@ -1,0 +1,29 @@
+{
+    "moduleName": "fetch-vscode-extension-stats",
+    "config": {
+        "script": "node -p \"JSON.stringify(require('./module-config/$KUMO_ENV.js'))\""
+    },
+    "tasks": [
+        {
+            "id": "package-lambda",
+            "type": "custom",
+            "run": {
+                "script": "kumo upload-lambda --build-number 1 --env $KUMO_ENV --region $KUMO_TASK_REGION --output $KUMO_TASK_OUTPUTS_FILE"
+            }
+        },
+        {
+            "id": "deploy-lambda",
+            "type": "cf-stack",
+            "stackName": "lambda",
+            "stackTemplate": {
+                "script": "cp ./template.json $KUMO_TEMPLATE_OUTPUT_FILE"
+            },
+            "stackParams": {
+                "LambdaRole": {"$ref": "#/_deploymentConfig/execution_role"},
+                "LambdaHandler": {"$ref": "#/_deploymentConfig/handler"},
+                "LambdaS3Bucket": "lambda-packages-cg3j2bu2",
+                "LambdaS3Key": "dev-fetch-vscode-extension-stats-1.zip"
+            }
+        }
+    ]
+}

@@ -2,12 +2,13 @@
 
 AWS Lambda function to save my Visual Studio Code extension stats into DynamoDB
 
-## Package Lambda
+## Deploy lambda
 
-Go to lambda-uploader directory and execute following
+Now vscode-extensions-stats uses [kumo](https://www.npmjs.com/package/kumo-plugins) to deploy the lambda.
+Go to `lambdas/fetch-vscode-extension-stats` directory and execute following:
 
 ```sh
-node --harmony_rest_parameters upload-lambda --function-name fetch-vscode-extension-stats --config ./config/vsc-extension-stats.json
+$ kumo deploy-module --region ap-southeast-2 --env dev --verbose
 ```
 
 ## Run app to get install counts per extensions

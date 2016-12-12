@@ -1,0 +1,10 @@
+{
+  "pluginPacks": {
+    "kumo-plugins": "0.0.24"
+  },
+  "deployer": {
+    "outputsBucket": {
+      "name": "vscode-stats-deployment-outputs"
+    }
+  }
+}
