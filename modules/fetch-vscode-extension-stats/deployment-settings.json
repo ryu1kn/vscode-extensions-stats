@@ -9,7 +9,8 @@
             "type": "custom",
             "run": {
                 "script": "kumo upload-lambda --build-number 1 --env $KUMO_ENV --region $KUMO_TASK_REGION --output $KUMO_TASK_OUTPUTS_FILE"
-            }
+            },
+            "outputsName": "packages"
         },
         {
             "id": "deploy-lambda",
@@ -21,8 +22,8 @@
             "stackParams": {
                 "LambdaRole": {"$ref": "#/_deploymentConfig/execution_role"},
                 "LambdaHandler": {"$ref": "#/_deploymentConfig/handler"},
-                "LambdaS3Bucket": "lambda-packages-cg3j2bu2",
-                "LambdaS3Key": "dev-fetch-vscode-extension-stats-1.zip"
+                "LambdaS3Bucket": {"$ref": "#/_deploymentOutputs/fetch-vscode-extension-stats/packages/fetch-vscode-extension-stats/s3Bucket"},
+                "LambdaS3Key": {"$ref": "#/_deploymentOutputs/fetch-vscode-extension-stats/packages/fetch-vscode-extension-stats/s3Key"}
             }
         }
     ]
