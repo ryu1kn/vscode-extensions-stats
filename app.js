@@ -2,15 +2,8 @@
 const aws = require('aws-sdk');
 const fs = require('fs');
 const createCsvStringifier = require('csv-writer').createObjectCsvStringifier;
+const docClient = new aws.DynamoDB.DocumentClient();
 
-const argv = require('minimist')(process.argv.slice(2));
-
-const config = JSON.parse(fs.readFileSync(argv.config, 'utf8'));
-const docClient = new aws.DynamoDB.DocumentClient({
-    region: config['aws.region'],
-    accessKeyId: config['aws.accessKeyId'],
-    secretAccessKey: config['aws.secretAccessKey']
-});
 const csvStringifier = createCsvStringifier({
     header: [   // TODO: Get header values dynamically
         {id: 'date', title: 'DATE'},

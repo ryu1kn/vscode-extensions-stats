@@ -14,13 +14,5 @@ $ kumo deploy-module --region ap-southeast-2 --env dev --verbose
 ## Run app to get install counts per extensions
 
 ```sh
-$ node app --config path/to/config.json
-```
-
-```json
-{
-  "aws.region": "REGION",
-  "aws.accessKeyId": "ACCESS_KEY_ID",
-  "aws.secretAccessKey": "SECRET_ACCESS_KEY"
-}
+$ AWS_PROFILE=your-profile node app
 ```
