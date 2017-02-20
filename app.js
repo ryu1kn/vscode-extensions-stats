@@ -15,18 +15,23 @@ const csvStringifier = createCsvStringifier({
     ]
 });
 
-const params = {TableName : 'vsc-extension-stats--stats'};
 
-// TODO: Paging
-docClient.scan(params).promise()
-    .then(data => data.Items.map(getWriteObject))
-    .then(transformIntoDateRecords)
-    .then(records => {
-        console.log(csvStringifier.getHeaderString().trim());
-        console.log(csvStringifier.stringifyRecords(records));
-    }).catch(e => {
-        console.error(e.stack);
-    });
+const repeatFn = scanResult => {
+    const pagingParams = scanResult ? {ExclusiveStartKey: scanResult.LastEvaluatedKey} : null;
+    const params = Object.assign({TableName : 'vsc-extension-stats--stats'}, pagingParams);
+    return docClient.scan(params).promise()
+        .then(scanResult => {
+            const records = scanResult.Items.map(getWriteObject);
+            const dataRecords = transformIntoDateRecords(records);
+            console.log(csvStringifier.stringifyRecords(dataRecords));
+            return scanResult;
+        });
+};
+const shouldContinue = scanResult => !!scanResult.LastEvaluatedKey
+
+console.log(csvStringifier.getHeaderString().trim());
+doWhile(repeatFn, null, shouldContinue)
+    .catch(e => { console.error(e.stack) });
 
 function getWriteObject(item) {
     return {
@@ -50,4 +55,10 @@ function transformIntoDateRecords(items) {
         }
         return dayRecords;
     }, []);
+}
+
+function doWhile(fn, args, shouldContinue) {
+    return fn.apply(null, args).then(result => {
+        return shouldContinue(result) ? doWhile(fn, [result], shouldContinue) : result;
+    });
 }
