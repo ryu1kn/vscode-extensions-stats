@@ -1,43 +1,150 @@
 {
-  "AWSTemplateFormatVersion": "2010-09-09",
-  "Description": "Lambda function to fetch vscode extension stats",
-  "Parameters": {
-    "LambdaRole": {
-      "Type": "String"
+    "AWSTemplateFormatVersion": "2010-09-09",
+    "Description": "Lambda function to fetch vscode extension stats",
+    "Parameters": {
+        "LambdaS3Bucket": {
+            "Type": "String"
+        },
+        "LambdaS3Key": {
+            "Type": "String"
+        },
+        "LambdaHandler": {
+            "Type": "String"
+        },
+        "LambdaFunctionName": {
+            "Type": "String"
+        },
+        "TableName": {
+            "Type": "String"
+        }
     },
-    "LambdaS3Bucket": {
-      "Type": "String"
-    },
-    "LambdaS3Key": {
-      "Type": "String"
-    },
-    "LambdaHandler": {
-      "Type": "String"
+    "Resources": {
+        "LambdaLogGroup": {
+            "Type": "AWS::Logs::LogGroup",
+            "Properties": {
+                "LogGroupName": {"Fn::Sub": "/aws/lambda/${LambdaFunctionName}"},
+                "RetentionInDays": 14
+            }
+        },
+        "LambdaFunctionRole": {
+            "Type": "AWS::IAM::Role",
+            "Properties": {
+                "AssumeRolePolicyDocument": {
+                    "Version": "2012-10-17",
+                    "Statement": [
+                        {
+                            "Effect": "Allow",
+                            "Principal": {
+                                "Service": [
+                                    "lambda.amazonaws.com"
+                                ]
+                            },
+                            "Action": [
+                                "sts:AssumeRole"
+                            ]
+                        }
+                    ]
+                },
+                "Path": "/",
+                "Policies": [
+                    {
+                        "PolicyName": "root",
+                        "PolicyDocument": {
+                            "Version": "2012-10-17",
+                            "Statement": [
+                                {
+                                    "Effect": "Allow",
+                                    "Action": [
+                                        "logs:CreateLogGroup",
+                                        "logs:CreateLogStream",
+                                        "logs:DescribeLogStreams",
+                                        "logs:PutLogEvents"
+                                    ],
+                                    "Resource": {
+                                        "Fn::Sub": "arn:aws:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/${LambdaFunctionName}:*"
+                                    }
+                                },
+                                {
+                                    "Effect": "Allow",
+                                    "Action": [
+                                        "dynamodb:PutItem"
+                                    ],
+                                    "Resource": {
+                                        "Fn::Sub": "arn:aws:dynamodb:${AWS::Region}:${AWS::AccountId}:table/${TableName}"
+                                    }
+                                }
+                            ]
+                        }
+                    }
+                ]
+            }
+        },
+        "LambdaFunction": {
+            "Type": "AWS::Lambda::Function",
+            "Properties": {
+                "FunctionName": {
+                    "Ref": "LambdaFunctionName"
+                },
+                "Description": "Periodically fetches vscode extension stats",
+                "Handler": {"Ref": "LambdaHandler"},
+                "Environment": {
+                    "Variables": {
+                        "TABLE_NAME": {"Ref": "TableName"}
+                    }
+                },
+                "Role": {
+                    "Fn::GetAtt": [
+                        "LambdaFunctionRole",
+                        "Arn"
+                    ]
+                },
+                "Code": {
+                    "S3Bucket": {
+                        "Ref": "LambdaS3Bucket"
+                    },
+                    "S3Key": {
+                        "Ref": "LambdaS3Key"
+                    }
+                },
+                "Runtime": "nodejs6.10",
+                "Timeout": 300
+            }
+        },
+        "ScheduledRule": {
+            "Type": "AWS::Events::Rule",
+            "Properties": {
+                "Description": "ScheduledRule",
+                "ScheduleExpression": "cron(0 10 * * ? *)",
+                "State": "ENABLED",
+                "Targets": [
+                    {
+                        "Arn": {
+                            "Fn::GetAtt": [
+                                "LambdaFunction",
+                                "Arn"
+                            ]
+                        },
+                        "Id": "TargetFunction",
+                        "Input": "{}"
+                    }
+                ]
+            }
+        },
+        "PermissionForEventsToInvokeLambda": {
+            "Type": "AWS::Lambda::Permission",
+            "Properties": {
+                "FunctionName": {
+                    "Ref": "LambdaFunction"
+                },
+                "Action": "lambda:InvokeFunction",
+                "Principal": "events.amazonaws.com",
+                "SourceArn": {
+                    "Fn::GetAtt": [
+                        "ScheduledRule",
+                        "Arn"
+                    ]
+                }
+            }
+        }
     }
-  },
-  "Resources": {
-    "FetchVSCodeExtensionStatsFunction": {
-      "Type": "AWS::Lambda::Function",
-      "Properties": {
-        "FunctionName": "fetch-vscode-extension-stats-w-kumo",
-        "Description": "Periodically fetches vscode extension stats",
-        "Handler": {
-          "Ref": "LambdaHandler"
-        },
-        "Role": {
-          "Ref": "LambdaRole"
-        },
-        "Code": {
-          "S3Bucket": {
-            "Ref": "LambdaS3Bucket"
-          },
-          "S3Key": {
-            "Ref": "LambdaS3Key"
-          }
-        },
-        "Runtime": "nodejs4.3",
-        "Timeout": "10"
-      }
-    }
-  }
 }

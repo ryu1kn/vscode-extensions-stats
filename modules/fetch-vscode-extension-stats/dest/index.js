@@ -4,7 +4,7 @@ const AWS = require('aws-sdk');
 const ExtensionGalleryReader = require('./lib/extension-gallery-reader');
 const request = require('request');
 
-const docClient = new AWS.DynamoDB.DocumentClient();
+const docClient = new AWS.DynamoDB.DocumentClient({convertEmptyValues: true});
 
 exports.handler = (event, context, callback) => {
     new ExtensionGalleryReader({request}).read()
@@ -15,7 +15,7 @@ exports.handler = (event, context, callback) => {
             // TODO: Rewrite with batchWrite
             return Promise.all(records.map(record => {
                 const params = {
-                    TableName : 'vsc-extension-stats--stats',
+                    TableName : process.env.TABLE_NAME,
                     Item: {
                         extensionId: `${record.extensionId}`,
                         fetchedAt: date.toISOString(),

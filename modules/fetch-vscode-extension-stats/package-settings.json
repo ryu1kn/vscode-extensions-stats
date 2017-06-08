@@ -1,0 +1,8 @@
+{
+  "packages": [
+    {
+      "name": "fetch-vscode-extension-stats",
+      "package-script": "cd dest && zip -q -r9 $KUMO_PACKAGE_OUTPUT_FILE *"
+    }
+  ]
+}

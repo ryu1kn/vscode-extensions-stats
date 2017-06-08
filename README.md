@@ -8,7 +8,7 @@ Now vscode-extensions-stats uses [kumo](https://www.npmjs.com/package/kumo-plugi
 Go to `lambdas/fetch-vscode-extension-stats` directory and execute following:
 
 ```sh
-$ kumo deploy-module --region ap-southeast-2 --env dev --verbose
+$ AWS_PROFILE=your-profile AWS_REGION=ap-southeast-2 BUILD_NUMBER=1 make deploy-lambda
 ```
 
 ## Run app to get install counts per extensions

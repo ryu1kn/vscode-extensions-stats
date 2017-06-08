@@ -8,7 +8,7 @@
             "id": "package-lambda",
             "type": "custom",
             "run": {
-                "script": "kumo upload-lambda --build-number 1 --env $KUMO_ENV --region $KUMO_TASK_REGION --output $KUMO_TASK_OUTPUTS_FILE"
+                "script": "kumo upload-package --build-number $BUILD_NUMBER --output $KUMO_TASK_OUTPUTS_FILE --upload-bucket lambda-packages-cg3j2bu2 --verbose"
             },
             "outputsName": "packages"
         },
@@ -20,10 +20,11 @@
                 "script": "cp ./template.json $KUMO_TEMPLATE_OUTPUT_FILE"
             },
             "stackParams": {
-                "LambdaRole": {"$ref": "#/_deploymentConfig/execution_role"},
+                "LambdaFunctionName": {"$ref": "#/_deploymentConfig/lambdaFunctionName"},
                 "LambdaHandler": {"$ref": "#/_deploymentConfig/handler"},
                 "LambdaS3Bucket": {"$ref": "#/_deploymentOutputs/fetch-vscode-extension-stats/packages/fetch-vscode-extension-stats/s3Bucket"},
-                "LambdaS3Key": {"$ref": "#/_deploymentOutputs/fetch-vscode-extension-stats/packages/fetch-vscode-extension-stats/s3Key"}
+                "LambdaS3Key": {"$ref": "#/_deploymentOutputs/fetch-vscode-extension-stats/packages/fetch-vscode-extension-stats/s3Key"},
+                "TableName": {"$ref": "#/_deploymentConfig/tableName"}
             }
         }
     ]
