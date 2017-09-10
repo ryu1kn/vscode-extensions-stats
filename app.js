@@ -4,6 +4,30 @@ const fs = require('fs');
 const createCsvStringifier = require('csv-writer').createObjectCsvStringifier;
 const docClient = new aws.DynamoDB.DocumentClient();
 
+class StatsStore {
+
+  constructor() {
+    this._data = Object.create(null);
+  }
+
+  insertItems(items) {
+    items.forEach(item => this._insertItem(item));
+  }
+
+  _insertItem(item) {
+    this._data[item.date] = Object.assign({},
+      this._data[item.date],
+      {[item.id]: item.installs}
+    );
+  }
+
+  getItems() {
+    return Object.keys(this._data)
+      .map(date => Object.assign({}, this._data[date], {date}));
+  }
+
+}
+
 const csvStringifier = createCsvStringifier({
     header: [   // TODO: Get header values dynamically
         {id: 'date', title: 'DATE'},
@@ -15,15 +39,15 @@ const csvStringifier = createCsvStringifier({
     ]
 });
 
-
+const statsStore = new StatsStore();
 const repeatFn = scanResult => {
     const pagingParams = scanResult ? {ExclusiveStartKey: scanResult.LastEvaluatedKey} : null;
     const params = Object.assign({TableName : 'vsc-extension-stats--stats'}, pagingParams);
+    console.error('> Fetching data...');
     return docClient.scan(params).promise()
         .then(scanResult => {
             const records = scanResult.Items.map(getWriteObject);
-            const dataRecords = transformIntoDateRecords(records);
-            console.log(csvStringifier.stringifyRecords(dataRecords));
+            statsStore.insertItems(records);
             return scanResult;
         });
 };
@@ -31,6 +55,10 @@ const shouldContinue = scanResult => !!scanResult.LastEvaluatedKey
 
 console.log(csvStringifier.getHeaderString().trim());
 doWhile(repeatFn, null, shouldContinue)
+    .then(() => {
+      console.error('> Converting into CSV...');
+      console.log(csvStringifier.stringifyRecords(statsStore.getItems()));
+    })
     .catch(e => { console.error(e.stack) });
 
 function getWriteObject(item) {
@@ -39,21 +67,6 @@ function getWriteObject(item) {
         date: item.fetchedAt.substring(0, 'yyyy-mm-dd'.length),
         installs: item.raw.statistics.filter(stat => stat.statisticName === 'install')[0].value
     };
-}
-
-function transformIntoDateRecords(items) {
-    return items.reduce((dayRecords, item) => {
-        const dayRecord = dayRecords.find(dayRecord => dayRecord.date === item.date);
-        if (dayRecord) {
-            dayRecord[item.id] = item.installs;
-        } else {
-            dayRecords.push({
-                date: item.date,
-                [item.id]: item.installs
-            });
-        }
-        return dayRecords;
-    }, []);
 }
 
 function doWhile(fn, args, shouldContinue) {
