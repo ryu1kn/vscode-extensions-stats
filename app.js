@@ -65,8 +65,13 @@ function getWriteObject(item) {
     return {
         id: item.extensionId,
         date: item.fetchedAt.substring(0, 'yyyy-mm-dd'.length),
-        installs: item.raw.statistics.filter(stat => stat.statisticName === 'install')[0].value
+        installs: extractInstallCount(item)
     };
+}
+
+function extractInstallCount(item) {
+  const statistics = item.raw.statistics;
+  return !statistics ? 0 : statistics.filter(stat => stat.statisticName === 'install')[0].value;
 }
 
 function doWhile(fn, args, shouldContinue) {
