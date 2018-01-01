@@ -17,4 +17,5 @@ clean:
 	rm -rf .kumo
 
 show-stats:
-	node app
+	AWS_REGION=ap-southeast-2 node app
+

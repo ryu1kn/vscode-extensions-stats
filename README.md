@@ -14,5 +14,5 @@ $ AWS_PROFILE=your-profile AWS_REGION=ap-southeast-2 BUILD_NUMBER=1 make deploy-
 ## Run app to get install counts per extensions
 
 ```sh
-$ AWS_PROFILE=your-profile node app
+$ AWS_PROFILE=your-profile make show-stats
 ```
