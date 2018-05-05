@@ -31,12 +31,13 @@ class StatsStore {
 const csvStringifier = createCsvStringifier({
     header: [   // TODO: Get header values dynamically
         {id: 'date', title: 'DATE'},
-        {id: '2100095e-ca9e-42ef-9bb4-5da1002c8139', title: 'Annotator'},
         {id: '79afa437-682e-4fa2-a4fd-87844832a1dc', title: 'Partial Diff'},
-        {id: 'ab840a62-e128-4f36-8587-2e52f4eecc06', title: 'Text Marker'},
         {id: 'fa3848aa-3e65-4989-86e3-99d138c7f90b', title: 'Put Print'},
+        {id: 'ab840a62-e128-4f36-8587-2e52f4eecc06', title: 'Text Marker'},
+        {id: '2100095e-ca9e-42ef-9bb4-5da1002c8139', title: 'Annotator'},
         {id: '370f75d3-459d-498a-80ed-e380c87750c5', title: 'Edit with Shell Command'},
-        {id: 'df972d01-91e4-4902-8227-9f36e4bd8700', title: 'Remote Repository Viewer'}
+        {id: 'df972d01-91e4-4902-8227-9f36e4bd8700', title: 'Remote Repository Viewer'},
+        {id: 'a01fa04b-2a62-498e-8628-1eab60ef1121', title: 'Extension Update Reporter'}
     ]
 });
 
