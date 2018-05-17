@@ -1,5 +1,6 @@
 {
   "name": "vscode-extensions-stats",
+  "private": true,
   "version": "0.0.1",
   "description": "AWS Lambda function to save my Visual Studio Code extension stats into DynamoDB",
   "main": "index.js",
