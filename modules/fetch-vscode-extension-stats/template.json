@@ -106,7 +106,7 @@
                         "Ref": "LambdaS3Key"
                     }
                 },
-                "Runtime": "nodejs10.x",
+                "Runtime": "nodejs16.x",
                 "Timeout": 300
             }
         },
